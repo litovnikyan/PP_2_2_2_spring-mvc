@@ -9,14 +9,15 @@ import web.Service.CarServiceImp;
 
 @Controller
 public class CarController {
+    private CarService carService;
+
+    public CarController(CarService carService) {
+        this.carService = carService;
+    }
+
     @GetMapping("/cars")
-    public String printCars(@RequestParam(value = "count", required = false) Integer count, ModelMap model) {
-        CarService cars = new CarServiceImp();
-        if (count == null) {
-            model.addAttribute("cars", cars.getCarList(5));
-        } else {
-            model.addAttribute("cars", cars.getCarList(count));
-        }
+    public String printCars(@RequestParam(value = "count", defaultValue = "5", required = false) Integer count, ModelMap model) {
+            model.addAttribute("cars", carService.getCarListByCount(count));
         return "cars";
     }
 }
